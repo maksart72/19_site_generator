@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Devman Wiki | Category page</title>
+  </head>
+  <body>
+  <a href="/">Главная</a>
+    <h1>Devman Wiki Category:{{category}}</h1>
+
+    {% for article in articles %}
+
+    <a href="{{article[1]}}">{{article[2]}}</a><br>
+
+    {% endfor %}
+
+  </body>
+</html>
