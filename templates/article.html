@@ -4,9 +4,12 @@
     <title>Devman Wiki | {{title}} </title>
   </head>
   <body>
+
+md_source = {{md_source}}, slug = {{slug}} ,topic_title = {{topic_title}}, article_url = {{article_url}} ,article_title = {{article_title}}, html_content = html_content
+
   <a href="/">Главная</a> | <a href="/{{slug}}/">Категория</a>
   Статья из раздела {{topic_title}}:<br>
   <h1>{{title}}</h1>
-      <p>{{article | safe}}</p>
+      <p>{{html_content | safe}}</p>
   </body>
 </html>

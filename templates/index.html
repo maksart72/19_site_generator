@@ -4,11 +4,13 @@
     <title>Devman Wiki | Main page</title>
   </head>
   <body>
-    <h1>Devman Wiki Liveroad!:</h1>
+    <h1>Devman Wiki</h1>
 
-    {% for article in articles %}
 
-    <a href="{{article[0]}}/{{article[1]}}">{{article[2]}}</a><br>
+
+    {% for article in index_content %}
+
+{{article[0] | safe}}/{{article[1] | safe}}/{{article[2] | safe}}/{{article[3] | safe}}/{{article[4] | safe}}/{{article[5] | safe}}<br>
 
     {% endfor %}
 
