@@ -1,17 +1,28 @@
 import json
 import collections
 import os
-from livereload import Server
 import markdown
 from flask import (
     Flask,
     render_template)
-app = Flask(__name__)
-app.debug = True
-server = Server(app.wsgi_app)
+from jinja2 import Environment, FileSystemLoader
 
-CONFIG_PATH = "config.json"
 SITE_ROOT = "site"
+OUTPUT_SITE_PATH = 'site'
+ARTICLES_PATH = 'articles'
+TEMPLATES_PATH = 'templates'
+INDEX_FILE = 'index.html'
+CONFIG = 'config.json'
+ENCODING = 'utf-8'
+
+app = Flask(__name__)
+
+def get_jinja_template(filename, path):
+    env = Environment(loader=FileSystemLoader(path),
+                      auto_reload=True,
+                      trim_blocks=True,
+                      lstrip_blocks=True,)
+    return env.get_template(filename)
 
 def create_site_folders(json_sitemap):
     if not os.path.exists(SITE_ROOT):
@@ -23,29 +34,60 @@ def create_site_folders(json_sitemap):
         if not os.path.exists(article_dir):
             os.makedirs(article_dir)
 
-
 def load_article(article_url):
     json_sitemap = load_sitemap()
-    for topics in json_sitemap['articles']:
-        if topics['source'].split('/')[1].split('.')[0] == article_url:
-            title = topics['title']
-            topic = topics['topic']
-            source = topics['source']
-    Article = collections.namedtuple('Article', 'text title slug')
+    for articles in json_sitemap['articles']:
+        if articles['source'].split('/')[1][:-3] == article_url:
+            title = articles['title']
+            topic = articles['topic']
+            source = articles['source']
+    for topics in json_sitemap['topics']:
+        if topics['slug'] == topic:
+            topic_title = topics['title']
+    Article = collections.namedtuple('Article', 'text title slug topic_title')
     with open('articles/'+source, 'r', encoding='utf-8') as file:
         html = markdown.markdown(file.read())
-    content = Article(text=html, title=title, slug=topic)
+    content = Article(text=html, title=title, slug=topic, topic_title= topic_title)
     return content
 
+
+def return_html_from_md(source):
+    Article = collections.namedtuple('Article', 'text title slug topic_title')
+    json_sitemap = load_sitemap()
+    for articles in json_sitemap['articles']:
+        if articles['source'] == source:
+            title = articles['title']
+            topic = articles['topic']
+    for topics in json_sitemap['topics']:
+        if topics['slug'] == topic:
+            topic_title = topics['title']
+    with open('articles/' + source, 'r', encoding='utf-8') as file:
+        html = markdown.markdown(file.read())
+
+    content = Article(text=html, title=title, slug=topic, topic_title = topic_title)
+    return content
+
+
 def load_sitemap():
-    with open(CONFIG_PATH,'r', encoding='utf-8') as config:
+    with open(CONFIG,'r', encoding='utf-8') as config:
         sitemap = json.load(config)
     return sitemap
 
-def make_site():
-    # TODO convert markdown to html, create site
-    print('Changes founded!')
-    return
+
+def generate_html():
+    json_sitemap = load_sitemap()
+    for articles in json_sitemap['articles']:
+        path = SITE_ROOT+'/'+articles['topic']+'/'+articles['source'].split('/')[1].replace('.md', '.html')
+        source = articles['source']
+        article_template = get_jinja_template('article.html', TEMPLATES_PATH)
+        content = return_html_from_md(source)
+        article_html = article_template.render(article=content.text, title = content.title, slug = content.slug,
+                                               topic_title = content.topic_title)
+        save_html(path, article_html)
+
+def save_html(path, article_html):
+    with open(path, 'w') as html_file:
+        html_file.write(article_html)
 
 @app.route("/")
 def index():
@@ -77,10 +119,12 @@ def view_topics(topic):
 @app.route('/<topic>/<article_url>')
 def view_article(topic=None, article_url=None):
     article = load_article(article_url)
-    return render_template('article.html', article = article.text, title=article.title, slug=article.slug)
+    return render_template('article.html', article = article.text, title=article.title, slug=article.slug, topic_title = article.topic_title)
 
 if __name__ == '__main__':
+
+
+    sitemap = load_sitemap()
+    create_site_folders(sitemap)
+    generate_html()
     app.run(debug=True, use_reloader=True)
-    server.watch('templates/*.html', make_site)
-    server.watch('articles/*.md', make_site)
-    server.serve(root='site/')
