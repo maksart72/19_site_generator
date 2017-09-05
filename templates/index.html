@@ -6,13 +6,19 @@
   <body>
     <h1>Devman Wiki</h1>
 
+{% set topics = [] %}
+{% for topic in index_content if topic not in topics %}
+    {% do topics.append(topic) %}
+{% endfor %}
 
 
-    {% for article in index_content %}
+{% for article in index_content %}
 
-{{article[0] | safe}}/{{article[1] | safe}}/{{article[2] | safe}}/{{article[3] | safe}}/{{article[4] | safe}}/{{article[5] | safe}}<br>
-
-    {% endfor %}
+    {{article[1] | uniq}}
+<li>
+ <a href="/{{article[1] | safe}}/{{article[3] | safe}}">{{article[4] | safe}} | {{article[2]}}</a>
+</li>
+{% endfor %}
 
   </body>
 </html>
