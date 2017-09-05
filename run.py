@@ -63,7 +63,6 @@ def save_index(index_content):
     index_html = index_template.render(index_content = index_content)
     save_html(path_index, index_html)
 
-
 def generate_category(topic):
     sitemap = create_sitemap()
     topic_content = []
@@ -75,9 +74,13 @@ def generate_category(topic):
     return topic_content, topics_title
 
 
-def save_category(category_content):
-    pass
-
+def save_category(json_sitemap):
+    category_template = get_jinja2_template('category.html',TEMPLATES_PATH)
+    for topic in json_sitemap['topics']:
+        topic_content, topics_title = generate_category(topic['slug'])
+        path_category = SITE_ROOT + '/'+ topic['slug'] +'/index.html'
+        category_html = category_template.render(topics = topic_content, topic_title = topics_title)
+        save_html(path_category, category_html)
 
 
 def generate_html(sitemap):
@@ -88,10 +91,6 @@ def generate_html(sitemap):
                                                article_title=article.article_title, html_content=article.html_content)
         path = SITE_ROOT + '/' + article.slug + '/' + article.article_url + '.html'
         save_html(path, article_html)
-
-
-
-
 
 
 # Flask setup
@@ -120,11 +119,15 @@ def view_article(topic=None, article_url=None):
 if __name__ == '__main__':
 
     json_sitemap = load_json_config()
-    sitemap = create_sitemap()
     create_site_folders(json_sitemap)
+
+    sitemap = create_sitemap()
+
     generate_html(sitemap)
 
     index_content = generate_index(sitemap)
     save_index(index_content)
+
+    save_category(json_sitemap)
 
     app.run(debug=True, use_reloader=True)

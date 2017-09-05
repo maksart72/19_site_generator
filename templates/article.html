@@ -1,15 +1,27 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Devman Wiki | {{title}} </title>
-  </head>
-  <body>
+{% extends "header.html" %}
 
-md_source = {{md_source}}, slug = {{slug}} ,topic_title = {{topic_title}}, article_url = {{article_url}} ,article_title = {{article_title}}
+{% block title %}
+Энциклопедия DEVMAN | {{topic_title}} | {{article_title}}
+{% endblock %}
 
-  <a href="../index.html">Главная</a> | <a href="./index.html">Категория</a>
-  Статья из раздела {{topic_title}}:<br>
-  <h1>{{title}}</h1>
+{% block head %}
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/main.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block navbar %}
+    <h1>Devman Wiki</h1>
+  <div class="navbar navbar-default " role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">  <a href="../">Главная</a> / <a href="./">{{topic_title}}</a> / {{article_title}}</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}  
+  <h2>{{article_title}}</h2>
       <p>{{html_content | safe}}</p>
-  </body>
-</html>
+{% endblock %}

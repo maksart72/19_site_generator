@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Devman Wiki | Category page</title>
-  </head>
+    <title>Devman Wiki | {{topic_title | safe}}</title>
+    </head>
   <body>
-  <a href="/">Главная</a>
-    <h1>Devman Wiki Category: {{topic_title}}</h1>
-
+  <h1>Devman Wiki</h1>
+  <a href="/">Главная</a> / {{topic_title | safe}}
+<h2>{{topic_title | safe}}</h2>
     {% for topic in topics %}
-
   <li>
- <a href="./{{topic[3] | safe}}.html">{{topic[4] | safe}} | {{topic[2]}}</a>
+ <a href="./{{topic[3] | safe}}.html">{{topic[4] | safe}}</a>
+
 </li>
 
     {% endfor %}
