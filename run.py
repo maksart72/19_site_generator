@@ -47,7 +47,6 @@ def get_jinja2_template(filename, path):
     env = Environment(loader=FileSystemLoader(path))
     return env.get_template(filename)
 
-
 def save_html(path, article_html):
     with open(path, 'w') as html_file:
         html_file.write(article_html)
@@ -65,15 +64,35 @@ def save_index(index_content):
     save_html(path_index, index_html)
 
 
+def generate_category(topic):
+    sitemap = create_sitemap()
+    topic_content = []
+    for topics in sitemap:
+        if topics.slug == topic:
+            topic_content.append(
+                (topics.md_source, topics.slug, topics.topic_title, topics.article_url, topics.article_title))
+            topics_title = topics.topic_title
+    return topic_content, topics_title
+
+
+def save_category(category_content):
+    pass
+
+
+
 def generate_html(sitemap):
     article_template = get_jinja2_template('article.html', TEMPLATES_PATH)
-    #category_template = get_jinja2_template('category.html', TEMPLATES_PATH)
     for article in sitemap:
         article_html = article_template.render(md_source=article.md_source, slug=article.slug,
                                                topic_title=article.topic_title, article_url=article.article_url,
                                                article_title=article.article_title, html_content=article.html_content)
         path = SITE_ROOT + '/' + article.slug + '/' + article.article_url + '.html'
         save_html(path, article_html)
+
+
+
+
+
 
 # Flask setup
 app = Flask(__name__)
@@ -84,28 +103,20 @@ def index():
     return render_template("index.html",
                        index_content=index_content)
 
-'''
 @app.route('/<topic>/')
 def view_topics(topic):
-    json_sitemap = load_sitemap()
-    sitemap = []
-    category = 'basics'
-    for url in json_sitemap['articles']:
-        if url['topic'] == topic:
-            article_info = (url['topic'],url['source'].split('/')[1][:-3], url['title'])
-            sitemap.append(article_info)
-    category_list = json_sitemap['topics']
-    for slug in category_list:
-        if slug['slug'] == topic:
-            category = slug['title']
-    return render_template("category.html",
-                       articles=sitemap, category = category)
+    topic_content, topics_title = generate_category(topic)
+    return render_template('category.html', topics = topic_content, topic_title = topics_title)
 
-@app.route('/<topic>/<article_url>')
+@app.route('/<topic>/<article_url>.html')
 def view_article(topic=None, article_url=None):
-    article = load_article(article_url)
-    return render_template('article.html', article = article.text, title=article.title, slug=article.slug, topic_title = article.topic_title)
-'''
+    sitemap = create_sitemap()
+    for article in sitemap:
+        if article.article_url == article_url:
+            return render_template('article.html', md_source=article.md_source, slug=article.slug,
+                                               topic_title=article.topic_title, article_url=article.article_url,
+                                               article_title=article.article_title, html_content=article.html_content)
+
 if __name__ == '__main__':
 
     json_sitemap = load_json_config()

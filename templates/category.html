@@ -5,11 +5,13 @@
   </head>
   <body>
   <a href="/">Главная</a>
-    <h1>Devman Wiki Category:{{category}}</h1>
+    <h1>Devman Wiki Category: {{topic_title}}</h1>
 
-    {% for article in articles %}
+    {% for topic in topics %}
 
-    <a href="{{article[1]}}">{{article[2]}}</a><br>
+  <li>
+ <a href="./{{topic[3] | safe}}.html">{{topic[4] | safe}} | {{topic[2]}}</a>
+</li>
 
     {% endfor %}
 
