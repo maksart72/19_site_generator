@@ -120,14 +120,9 @@ if __name__ == '__main__':
 
     json_sitemap = load_json_config()
     create_site_folders(json_sitemap)
-
     sitemap = create_sitemap()
-
     generate_html(sitemap)
-
     index_content = generate_index(sitemap)
     save_index(index_content)
-
     save_category(json_sitemap)
-
     app.run(debug=True, use_reloader=True)

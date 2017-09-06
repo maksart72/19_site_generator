@@ -12,21 +12,21 @@
 {% endblock %}
 
 {% block navbar %}
-    <h1>Devman Wiki</h1>
-  <div class="navbar navbar-default " role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header"><a class="navbar-brand" href="../">Главная</a></div>
-    </div>
-</div>
+
+
+<nav class="navbar fixed-top navbar-inverse bg-inverse">
+<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+  <a class="navbar-brand" href="../">Devman Wiki</a>
+  </div>
+</nav>
 {% endblock %}
 
 {% block content %}
-<h2>Список статей</h2>
-
+<h3>Содержание энциклопедии</h3>
 {% for article in index_content %}
 <li>
  <a href="./{{article[1] | safe}}/{{article[3] | safe}}.html">{{article[4] | safe}} | {{article[2]}}</a>
-</li><br>
+</li>
 {% endfor %}
 
 {% endblock %}
