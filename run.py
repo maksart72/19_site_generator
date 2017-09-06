@@ -73,7 +73,6 @@ def generate_category(topic):
             topics_title = topics.topic_title
     return topic_content, topics_title
 
-
 def save_category(json_sitemap):
     category_template = get_jinja2_template('category.html',TEMPLATES_PATH)
     for topic in json_sitemap['topics']:
