@@ -16,16 +16,16 @@
 
 <nav class="navbar fixed-top navbar-inverse bg-inverse">
 <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-  <a class="navbar-brand" href="../">Devman Wiki</a>
+  <a class="navbar-brand" href="../">Энциклопедия DevMan</a>
   </div>
 </nav>
 {% endblock %}
 
 {% block content %}
-<h3>Содержание энциклопедии</h3>
+<h3>Содержание:</h3>
 {% for article in index_content %}
 <li>
- <a href="./{{article[1] | safe}}/{{article[3] | safe}}.html">{{article[4] | safe}} | {{article[2]}}</a>
+ <a href="./{{article[1]}}/{{article[3]}}.html">{{article[4] | safe}} | {{article[2]}}</a>
 </li>
 {% endfor %}
 

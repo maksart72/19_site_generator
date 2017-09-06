@@ -16,7 +16,7 @@
 
 <nav class="navbar fixed-top navbar-inverse bg-inverse">
 <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-  <a class="navbar-brand" href="../">Devman Wiki</a>
+  <a class="navbar-brand" href="../">Энциклопедия DevMan</a>
   <a class="navbar-brand" href="./">{{topic_title}}</a>
   </div>
 </nav>
@@ -28,7 +28,7 @@
 <h3>Раздел: {{topic_title | safe}}</h3>
     {% for topic in topics %}
   <li>
- <a href="./{{topic[3] | safe}}.html">{{topic[4] | safe}}</a>
+ <a href="./{{topic[3]}}.html">{{topic[4]}}</a>
 </li>
     {% endfor %}
 
