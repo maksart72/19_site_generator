@@ -48,7 +48,7 @@ def get_jinja2_template(filename, path):
     return env.get_template(filename)
 
 def save_html(path, article_html):
-    with open(path, 'w') as html_file:
+    with open(path, 'w', encoding=ENCODING) as html_file:
         html_file.write(article_html)
 
 def generate_index(sitemap):
