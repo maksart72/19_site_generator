@@ -106,7 +106,7 @@ def generate_html(site_map):
         article_html = article_template.render(md_source=article.md_source, slug=article.slug,
                                                topic_title=article.topic_title, article_url=article.article_url,
                                                article_title=article.article_title, html_content=article.html_content)
-        path = SITE_ROOT + '/' + article.slug + '/' + article.article_url + '.html'
+        path = SITE_ROOT + '/' + article.slug + '/' + article.article_url.replace(u'&', u"&amp;") + '.html'
         save_html(path, article_html)
 
 
