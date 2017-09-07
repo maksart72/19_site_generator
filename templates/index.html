@@ -11,8 +11,6 @@
 {% endblock %}
 
 {% block navbar %}
-
-
 <nav class="navbar fixed-top navbar-inverse bg-inverse">
 <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
   <a class="navbar-brand" href="../">Энциклопедия DevMan</a>
@@ -22,11 +20,13 @@
 
 {% block content %}
 <h3>Содержание:</h3>
+<ul>
 {% for article in index_content %}
+
 <li>
  <a href="./{{article[1]}}/{{article[3]}}.html">{{article[4] | safe}} | {{article[2]}}</a>
 </li>
 {% endfor %}
-
+</ul>
 {% endblock %}
 

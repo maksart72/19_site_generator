@@ -25,9 +25,10 @@
 
 <h3>Раздел: {{topic_title | safe}}</h3>
     {% for topic in topics %}
+    <ul>
   <li>
  <a href="./{{topic[3]}}.html">{{topic[4]}}</a>
-</li>
+</li></ul>
     {% endfor %}
 
 {% endblock %}
