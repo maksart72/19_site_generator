@@ -12,12 +12,17 @@ TEMPLATES_PATH = 'templates'
 CONFIG = 'config.json'
 ENCODING = 'utf-8'
 
+def html_special_chars(text):
+    return text \
+    .replace(u'"', u"&amp;quot;") \
+    .replace(u"'", u"&#039;") \
+    .replace(u"<", u"&lt;") \
+    .replace(u">", u"&gt;")
 
 def load_json_config():
     with open(CONFIG, 'r', encoding='utf-8') as config:
         json_site_map = json.load(config)
     return json_site_map
-
 
 def create_site_map():
     content = []
@@ -27,7 +32,7 @@ def create_site_map():
     for articles in json_site_map['articles']:
         md_source = articles['source']
         slug = articles['topic']
-        article_title = articles['title']
+        article_title = html_special_chars(articles['title'])
         article_url = articles['source'].split('/')[1][:-3]
         with open('articles/' + md_source, 'r', encoding='utf-8') as file:
             html_content = markdown.markdown(file.read())
