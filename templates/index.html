@@ -18,11 +18,13 @@
 </nav>
 {% endblock %}
 
+{% block pagetitle %}
+{% endblock %}
 {% block content %}
+
 <h3>Содержание:</h3>
 <ul>
 {% for article in index_content %}
-
 <li>
  <a href="./{{article[1]}}/{{article[3]}}.html">{{article[4] | safe}} | {{article[2]}}</a>
 </li>
