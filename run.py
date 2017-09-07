@@ -14,7 +14,7 @@ ENCODING = 'utf-8'
 
 def html_special_chars(text):
     return text \
-    .replace(u'"', u"&amp;quot;") \
+    .replace(u'"', u"&quot;") \
     .replace(u"'", u"&#039;") \
     .replace(u"<", u"&lt;") \
     .replace(u">", u"&gt;")
@@ -33,7 +33,7 @@ def create_site_map():
         md_source = articles['source']
         slug = articles['topic']
         article_title = html_special_chars(articles['title'])
-        article_url = articles['source'].split('/')[1][:-3]
+        article_url = articles['source'].split('/')[1][:-3].replace(u' ', u"%20")
         with open('articles/' + md_source, 'r', encoding='utf-8') as file:
             html_content = markdown.markdown(file.read())
         for topics in json_site_map['topics']:
