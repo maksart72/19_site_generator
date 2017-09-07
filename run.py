@@ -33,7 +33,7 @@ def create_site_map():
         md_source = articles['source']
         slug = articles['topic']
         article_title = html_special_chars(articles['title'])
-        article_url = articles['source'].split('/')[1][:-3].replace(u' ', u"_")
+        article_url = articles['source'].split('/')[1][:-3].replace(u' ', u"_").replace(u'&', u"&amp;")
         with open('articles/' + md_source, 'r', encoding='utf-8') as file:
             html_content = markdown.markdown(file.read())
         for topics in json_site_map['topics']:
@@ -106,7 +106,7 @@ def generate_html(site_map):
         article_html = article_template.render(md_source=article.md_source, slug=article.slug,
                                                topic_title=article.topic_title, article_url=article.article_url,
                                                article_title=article.article_title, html_content=article.html_content)
-        path = SITE_ROOT + '/' + article.slug + '/' + article.article_url.replace(u'&', u"&amp;") + '.html'
+        path = SITE_ROOT + '/' + article.slug + '/' + article.article_url + '.html'
         save_html(path, article_html)
 
 
