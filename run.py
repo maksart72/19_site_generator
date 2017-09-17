@@ -22,7 +22,7 @@ def load_json_config():
     return json_site_map
 
 def create_site_map():
-    content = []
+    site_map_content = []
     json_site_map = load_json_config()
     site_map = collections.namedtuple(
         'site_map', 'md_source slug topic_title article_url article_title html_content')
@@ -36,9 +36,9 @@ def create_site_map():
         for topics in json_site_map['topics']:
             if topics['slug'] == slug:
                 topic_title = topics['title']
-        content.append(site_map(md_source=md_source, slug=slug, topic_title=topic_title,
+                site_map_content.append(site_map(md_source=md_source, slug=slug, topic_title=topic_title,
                                 article_url=article_url, article_title=article_title, html_content=html_content),)
-    return content
+    return site_map_content
 
 
 def create_site_folders(json_site_map):
@@ -70,7 +70,7 @@ def generate_index(site_map):
 
 def save_index(index_content):
     index_template = get_jinja2_template('index.html', TEMPLATES_PATH)
-    path_index = SITE_ROOT + '/' + 'index.html'
+    path_index = '%s/index.html'%(SITE_ROOT)
     index_html = index_template.render(index_content=index_content)
     save_html(path_index, index_html)
 
@@ -91,7 +91,7 @@ def save_category(json_site_map):
     category_template = get_jinja2_template('category.html', TEMPLATES_PATH)
     for topic in json_site_map['topics']:
         topic_content, topics_title = generate_category(topic['slug'])
-        path_category = SITE_ROOT + '/' + topic['slug'] + '/index.html'
+        path_category = '%s/%s/index.html'%(SITE_ROOT,topic['slug'])
         category_html = category_template.render(
             topics=topic_content, topic_title=topics_title)
         save_html(path_category, category_html)
@@ -103,7 +103,7 @@ def generate_html(site_map):
         article_html = article_template.render(md_source=article.md_source, slug=article.slug,
                                                topic_title=article.topic_title, article_url=article.article_url,
                                                article_title=article.article_title, html_content=article.html_content)
-        path = SITE_ROOT + '/' + article.slug + '/' + article.article_url + '.html'
+        path = '%s/%s/%s.html'%(SITE_ROOT,article.slug,article.article_url)
         save_html(path, article_html)
 
 if __name__ == '__main__':
