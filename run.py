@@ -2,6 +2,7 @@ import json
 import collections
 import os
 import markdown
+from slugify import slugify
 from jinja2 import Environment, FileSystemLoader
 
 SITE_ROOT = "site"
