@@ -2,9 +2,6 @@ import json
 import collections
 import os
 import markdown
-from flask import (
-    Flask,
-    render_template)
 from jinja2 import Environment, FileSystemLoader
 
 SITE_ROOT = "site"
@@ -109,34 +106,6 @@ def generate_html(site_map):
         path = SITE_ROOT + '/' + article.slug + '/' + article.article_url + '.html'
         save_html(path, article_html)
 
-
-# Flask setup
-app = Flask(__name__)
-
-
-@app.route("/")
-def index():
-    index_content = generate_index(site_map)
-    return render_template("index.html",
-                           index_content=index_content)
-
-
-@app.route('/<topic>/')
-def view_topics(topic):
-    topic_content, topics_title = generate_category(topic)
-    return render_template('category.html', topics=topic_content, topic_title=topics_title)
-
-
-@app.route('/<topic>/<article_url>.html')
-def view_article(topic=None, article_url=None):
-    site_map = create_site_map()
-    for article in site_map:
-        if article.article_url == article_url:
-            return render_template('article.html', md_source=article.md_source, slug=article.slug,
-                                   topic_title=article.topic_title, article_url=article.article_url,
-                                   article_title=article.article_title, html_content=article.html_content)
-
-
 if __name__ == '__main__':
 
     json_site_map = load_json_config()
@@ -146,5 +115,4 @@ if __name__ == '__main__':
     index_content = generate_index(site_map)
     save_index(index_content)
     save_category(json_site_map)
-    app.run(debug=True, use_reloader=True)
 
